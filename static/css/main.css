@@ -60,17 +60,6 @@ p {
     border-radius: 10px;
 }
 
-.custom-marker {
-    background-color: #444cf7;
-    border: 2px solid #fff;
-    border-radius: 50%;
-    width: 15px;
-    height: 15px;
-    box-shadow: 0 0 3px rgba(0, 0, 0, 0.3);
-}
-
-/* 444cf7 */
-
 .container_titrePlanning,
 .container_infoFilm {
     margin-left: 10%;
@@ -190,10 +179,6 @@ p {
     flex-grow: 0;
 }
 
-.horaire_container {
-    background-color: white;
-}
-
 .seance_container {
     margin-right: 10%;
     margin-left: 10%;
@@ -274,41 +259,6 @@ footer {
 a {
     text-decoration: none;
     color: black;
-}
-
-#loader {
-    min-width: 100vw;
-    min-height: 100vh;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-#loader div.box {
-    width: 3rem;
-    height: 3rem;
-    position: relative;
-    margin: 0 1rem 0 1rem;
-}
-
-#loader div.box::after {
-    content: "";
-    position: absolute;
-    background: #444cf7;
-    height: 3rem;
-    ;
-    width: 3rem;
-    border-radius: 50%;
-    animation: move 1s ease alternate infinite;
-    opacity: 0;
-}
-
-#loader div.box:nth-child(2)::after {
-    animation-delay: 0.25s;
-}
-
-#loader div.box:nth-child(3)::after {
-    animation-delay: 0.5s;
 }
 
 @keyframes move {
