@@ -114,4 +114,4 @@ def home():
                            JAWG_API_KEY=getenv("JAWG_API_KEY"))
 
 if __name__ == '__main__':
-    app.run()
+    app.run(host=getenv("HOST"), port=getenv("PORT"))
