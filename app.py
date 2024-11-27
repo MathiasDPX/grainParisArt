@@ -11,6 +11,8 @@ from modules.Classes import *
 theaters = [Theater(data["node"]) for data in
             requests.get("https://www.allocine.fr/_/localization_city/Brest").json()["values"]["theaters"]]
 
+theaters = theaters + [Theater(data["node"]) for data in requests.get("https://www.allocine.fr/_/localization_city/Landerneau").json()["values"]["theaters"]]
+
 
 def getShowtimes(date):
     showtimes: list[Showtime] = []
