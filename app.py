@@ -2,6 +2,7 @@ from flask import Flask, render_template, request
 from datetime import timedelta
 from dotenv import load_dotenv
 from os import getenv
+import html
 
 load_dotenv()
 
@@ -11,7 +12,7 @@ from modules.Classes import *
 theaters = [Theater(data["node"]) for data in
             requests.get("https://www.allocine.fr/_/localization_city/Brest").json()["values"]["theaters"]]
 
-theaters = theaters + [Theater(data["node"]) for data in requests.get("https://www.allocine.fr/_/localization_city/Landerneau").json()["values"]["theaters"]]
+theaters += [Theater(data["node"]) for data in requests.get("https://www.allocine.fr/_/localization_city/Landerneau").json()["values"]["theaters"]]
 
 
 def getShowtimes(date):
@@ -33,7 +34,7 @@ def getShowtimes(date):
                 "genres": ", ".join(movie.genres),
                 "casting": ", ".join(movie.cast),
                 "realisateur": movie.director,
-                "synopsis": movie.synopsis,
+                "synopsis": html.unescape(movie.synopsis),
                 "affiche": movie.affiche,
                 "director": movie.director,
                 "wantToSee": movie.wantToSee,
