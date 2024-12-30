@@ -1,11 +1,11 @@
-import psycopg2
-from psycopg2 import OperationalError
 import time
-from typing import Optional, Any
 import logging
+import psycopg2
 from os import getenv
-import httpagentparser
 from dotenv import load_dotenv
+from typing import Optional, Any
+from psycopg2 import OperationalError
+from ua_parser import parse_os, parse_user_agent
 
 load_dotenv()
 
@@ -153,12 +153,7 @@ if isInit:
 
 def log(ip:str, useragent:str, day:int) -> bool:
     if not isInit: return True
-    ua_data = httpagentparser.detect(useragent)
-    os = ua_data.get('os', {}).get("name", "unknown")
-    browser = ua_data.get('browser', {}).get("name", "unknown")
+    os = parse_os(useragent).family
+    browser = parse_user_agent(useragent).family
     success = db.execute_query(f"INSERT INTO cinema_queries (ip, time, browser, os, day) VALUES (\'{ip}\', current_timestamp, \'{browser}\', \'{os}\', {day});")
     return success
-
-if __name__ == "__main__":
-    ua ="Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:133.0) Gecko/20100101 Firefox/133.0"
-    print(httpagentparser.detect(ua))

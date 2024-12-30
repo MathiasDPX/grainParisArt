@@ -2,3 +2,4 @@ Flask
 psycopg2
 requests
 python-dotenv
+ua-parser[regex]
