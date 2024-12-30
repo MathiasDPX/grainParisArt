@@ -61,33 +61,15 @@ for i in range(0, 7):
     print(f"{len(day_showtimes)} séances récupéré {i + 1}/7!")
 
 
-def translateMonth(num: int):
-    match num:
-        case 1: return "janv"
-        case 2: return "févr"
-        case 3: return "mars"
-        case 4: return "avr"
-        case 5: return "mai"
-        case 6: return "juin"
-        case 7: return "juil"
-        case 8: return "août"
-        case 9: return "sept"
-        case 10: return "oct"
-        case 11: return "nov"
-        case 12: return "déc"
-        case _: return "???"
+def translate_month(num: int) -> str:
+    months = ["janv", "févr", "mars", "avr", "mai", "juin",
+              "juil", "août", "sept", "oct", "nov", "déc"]
+    return months[num - 1] if 1 <= num <= len(months) else "???"
 
 
-def translateDay(weekday: int):
-    match weekday:
-        case 0: return "lun"
-        case 1: return "mar"
-        case 2: return "mer"
-        case 3: return "jeu"
-        case 4: return "ven"
-        case 5: return "sam"
-        case 6: return "dim"
-        case _: return "???"
+def translate_day(weekday: int) -> str:
+    days = ["lun", "mar", "mer", "jeu", "ven", "sam", "dim"]
+    return days[weekday] if 0 <= weekday < len(days) else "???"
 
 
 app = Flask(__name__)
@@ -104,9 +86,9 @@ def home():
     for i in range(0, 7):
         day = datetime.today() + timedelta(i)
         dates.append({
-            "jour": translateDay(day.weekday()),
+            "jour": translate_day(day.weekday()),
             "chiffre": day.day,
-            "mois": translateMonth(day.month),
+            "mois": translate_month(day.month),
             "choisi": i == delta,
             "index": i
         })
