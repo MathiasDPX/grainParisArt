@@ -75,6 +75,10 @@ def translate_day(weekday: int) -> str:
 
 app = Flask(__name__)
 
+@app.route('/healthcheck')
+def healthcheck():
+    return 'ok'
+
 @app.route('/')
 def home():
     delta = request.args.get("delta", default=0, type=int)
