@@ -153,7 +153,13 @@ if isInit:
 
 def log(ip:str, useragent:str, day:int) -> bool:
     if not isInit: return True
-    os = parse_os(useragent).family
-    browser = parse_user_agent(useragent).family
-    success = db.execute_query(f"INSERT INTO cinema_queries (ip, time, browser, os, day) VALUES (\'{ip}\', current_timestamp, \'{browser}\', \'{os}\', {day});")
+    os = parse_os(useragent)
+    browser = parse_user_agent(useragent)
+
+    os_family = os.family if os != None else "unknown"
+    browser_family = browser.family if browser != None else "unknown"
+
+    print(os_family, browser_family)
+
+    success = db.execute_query(f"INSERT INTO cinema_queries (ip, time, browser, os, day) VALUES (\'{ip}\', current_timestamp, \'{browser_family}\', \'{os_family}\', {day});")
     return success
