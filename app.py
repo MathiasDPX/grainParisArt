@@ -3,13 +3,14 @@ from datetime import timedelta
 from dotenv import load_dotenv
 from threading import Thread
 from os import getenv
-import monitoring
 import html
 
 load_dotenv()
 
 # IMPORT DES MODULES
-from modules.Classes import *
+from modules.api import *
+from modules.curl import *
+import modules.monitoring as monitoring
 
 theaters = [Theater(data["node"]) for data in
             requests.get("https://www.allocine.fr/_/localization_city/Brest").json()["values"]["theaters"]]
@@ -55,7 +56,6 @@ def getShowtimes(date):
 
     return data
 
-
 showtimes = []
 for i in range(0, 7):
     day_showtimes = getShowtimes(datetime.today() + timedelta(days=i))
@@ -87,11 +87,15 @@ def home():
     if delta > 6: delta = 6
     if delta < 0: delta = 0
 
+    useragent = request.headers.get('User-Agent')
     Thread(target=monitoring.log, kwargs={
         'ip': request.environ.get("HTTP_X_FORWARDED_FOR", request.remote_addr),
-        'useragent': request.headers.get('User-Agent'),
+        'useragent': useragent,
         'day': delta
     }).start()
+
+    if useragent.startswith("curl/"):
+        return handle_curl(showtimes[delta])
 
     dates = []
 
