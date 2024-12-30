@@ -1,6 +1,7 @@
 from flask import Flask, render_template, request
 from datetime import timedelta
 from dotenv import load_dotenv
+from threading import Thread
 from os import getenv
 import monitoring
 import html
@@ -86,11 +87,11 @@ def home():
     if delta > 6: delta = 6
     if delta < 0: delta = 0
 
-    monitoring.log(
-        ip=request.environ.get("HTTP_X_FORWARDED_FOR", request.remote_addr),
-        useragent=request.headers.get('User-Agent'),
-        day=delta
-    )
+    Thread(target=monitoring.log, kwargs={
+        'ip': request.environ.get("HTTP_X_FORWARDED_FOR", request.remote_addr),
+        'useragent': request.headers.get('User-Agent'),
+        'day': delta
+    }).start()
 
     dates = []
 
