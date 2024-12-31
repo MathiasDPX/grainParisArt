@@ -1,6 +1,7 @@
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, redirect, url_for
 from datetime import timedelta
 from dotenv import load_dotenv
+from zoneinfo import ZoneInfo
 from threading import Thread
 from os import getenv
 import html
@@ -17,6 +18,7 @@ theaters = [Theater(data["node"]) for data in
 
 theaters += [Theater(data["node"]) for data in requests.get("https://www.allocine.fr/_/localization_city/Landerneau").json()["values"]["theaters"]]
 
+timezone = ZoneInfo(getenv("TIMEZONE"))
 
 def getShowtimes(date):
     showtimes: list[Showtime] = []
@@ -58,7 +60,7 @@ def getShowtimes(date):
 
 showtimes = []
 for i in range(0, 7):
-    day_showtimes = getShowtimes(datetime.today() + timedelta(days=i))
+    day_showtimes = getShowtimes(datetime.now(timezone) + timedelta(days=i))
     showtimes.append(day_showtimes)
     print(f"{len(day_showtimes)} séances récupéré {i + 1}/7!")
 
@@ -80,6 +82,10 @@ app = Flask(__name__)
 def healthcheck():
     return 'ok'
 
+@app.route('/<int:day>')
+def special_day(day:int):
+    return redirect(url_for("home", delta=day))
+
 @app.route('/')
 def home():
     delta = request.args.get("delta", default=0, type=int)
@@ -95,12 +101,13 @@ def home():
     }).start()
 
     if useragent.startswith("curl/"):
-        return handle_curl(showtimes[delta])
+        day = datetime.now(timezone) + timedelta(delta)
+        return handle_curl(showtimes[delta], f"{day.day} {translate_month(day.month)}")
 
     dates = []
 
     for i in range(0, 7):
-        day = datetime.today() + timedelta(i)
+        day = datetime.now(timezone) + timedelta(i)
         dates.append({
             "jour": translate_day(day.weekday()),
             "chiffre": day.day,
