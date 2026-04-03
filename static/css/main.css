@@ -83,6 +83,7 @@ p {
     height: 288px;
     border-radius: 5px;
     padding-right: 30px;
+    object-fit: cover;
 }
 
 .container_infoFilm {
