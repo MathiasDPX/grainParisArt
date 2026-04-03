@@ -92,10 +92,15 @@ class Theater:
             raise Exception(f"API Error: {data}")
         
         for movie in data['results']:
+            if movie.get("movie") is None:
+                continue
             inst = Movie(movie["movie"])
-            movie_showtimes = movie["showtimes"].get("dubbed", []) + \
-                            movie["showtimes"].get("original", []) + \
-                            movie["showtimes"].get("local", [])
+            movie_showtimes = [
+                showtime
+                for group in movie["showtimes"].values()
+                if group
+                for showtime in group
+            ]
 
             for showtime_data in movie_showtimes:
                 showtimes.append(Showtime(showtime_data, self, inst))
