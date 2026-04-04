@@ -58,11 +58,16 @@ def getShowtimes(date):
 
     return data
 
-showtimes = []
-for i in range(0, 7):
-    day_showtimes = getShowtimes(datetime.now(timezone) + timedelta(days=i))
-    showtimes.append(day_showtimes)
-    print(f"{len(day_showtimes)} séances récupéré {i + 1}/7!")
+def refreshShowtimes():
+    global showtimes
+    new_showtimes = []
+    for i in range(0, 7):
+        day_showtimes = getShowtimes(datetime.now(timezone) + timedelta(days=i))
+        new_showtimes.append(day_showtimes)
+        print(f"{len(day_showtimes)} séances récupéré {i + 1}/7!")
+    showtimes = new_showtimes
+
+refreshShowtimes()
 
 
 def translate_month(num: int) -> str:
