@@ -1,5 +1,5 @@
 Flask
-psycopg2
 requests
+psycopg2-binary
 python-dotenv
 ua-parser[regex]

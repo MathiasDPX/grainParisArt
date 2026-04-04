@@ -5,7 +5,8 @@ RUN apt-get update && apt-get install -y --no-install-recommends cron && rm -rf 
 WORKDIR /app
 
 COPY requirements.txt .
-RUN pip install --no-cache-dir -r requirements.txt gunicorn
+RUN pip install --no-cache-dir gunicorn
+RUN pip install --no-cache-dir -r requirements.txt
 
 COPY . .
 
