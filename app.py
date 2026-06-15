@@ -50,7 +50,7 @@ def getShowtimes(date):
         if theater.name not in data[movie.title]["seances"].keys():
             data[movie.title]["seances"][theater.name] = []
 
-        data[movie.title]["seances"][theater.name].append(showtime.startsAt.strftime("%H:%M"))
+        data[movie.title]["seances"][theater.name].append([showtime.startsAt.strftime("%H:%M"), showtime.ticketURL])
 
     data = data.values()
 

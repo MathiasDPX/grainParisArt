@@ -74,7 +74,7 @@
         <div class="horaires_container">
             {% for seance in seances %}
             <div class="horaire">
-                <p>{{seance}}</p>
+                <a href="{{ seance[1] }}" target="_blank">{{ seance[0] }}</a>
             </div>
             {% endfor %}
         </div>

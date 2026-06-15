@@ -126,6 +126,7 @@ p {
     width: 80px;
     height: 100px;
     justify-content: center;
+    color: black;
 }
 
 .date-selectionne {
@@ -199,7 +200,6 @@ p {
     border-radius: 5px;
     height: 40px;
     width: 100px;
-    color: #444cf7;
     box-sizing: border-box;
     align-items: center;
     display: flex;
@@ -209,6 +209,14 @@ p {
     filter: drop-shadow(2mm 6mm 6mm rgba(2, 2, 2, 0.2));
     flex-shrink: 0;
     flex-grow: 0;
+}
+
+.horaire a:visited, .horaire a {
+    color: #444cf7;
+}
+
+div.data a:any-link {
+    color: #000000;
 }
 
 footer {
@@ -259,6 +267,9 @@ footer {
 
 a {
     text-decoration: none;
+}
+
+.container_footer a {
     color: black;
 }
 
@@ -404,9 +415,8 @@ html {
         margin-left: 5px;
     }
     .cinema p,
-    .horaire p{
+    .horaire a {
         font-size: 10px;
-        margin-block-start: 1em;
     }
     .container_titrePlanning,
     .container_infoFilm {

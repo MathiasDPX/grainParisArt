@@ -1,6 +1,20 @@
 from datetime import datetime
 import requests
 
+def _get_best_ticket(tickets):
+    if len(tickets) == 0:
+        return None
+
+    bestTicket = tickets[0]
+    for ticket in tickets:
+        if ticket['provider'] == 'default':
+            bestTicket = ticket
+
+    if len(bestTicket['urls']) == 0:
+        return None
+
+    return bestTicket['urls'][0]
+
 class Movie:
     def __init__(self, data) -> None:
         self.data = data
@@ -54,6 +68,7 @@ class Showtime:
         self.services = data["service"]
         self.theater:Theater = theather
         self.movie = movie
+        self.ticketURL = _get_best_ticket(data['data']['ticketing'])
 
     def __repr__(self) -> str:
         return f"<{self.__class__.__name__} name={self.movie.title} startsAt={self.startsAt}>"
@@ -132,3 +147,4 @@ if __name__ == "__main__":
     showtimes = cgr.getShowtimes(datetime.today())
 
     print(showtimes[0])
+    print(showtimes[0].ticketURL)
