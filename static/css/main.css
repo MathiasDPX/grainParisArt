@@ -215,7 +215,7 @@ p {
     color: #444cf7;
 }
 
-div.data a:any-link {
+div.data a, h3.titreFilm a {
     color: #000000;
 }
 
