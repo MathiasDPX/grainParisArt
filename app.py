@@ -53,6 +53,10 @@ def getShowtimes(date):
 
         data[movie.title]["seances"][theater.name].append([showtime.startsAt.strftime("%H:%M"), showtime.ticketURL])
 
+    for movie in data.values():
+        for theater_name in movie["seances"]:
+            movie["seances"][theater_name].sort(key=lambda seance: seance[0])
+
     data = data.values()
 
     data = sorted(data, key=lambda x: x["wantToSee"], reverse=True)
