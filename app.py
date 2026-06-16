@@ -4,6 +4,7 @@ from dotenv import load_dotenv
 from zoneinfo import ZoneInfo
 from threading import Thread
 from os import getenv
+import time
 import html
 
 load_dotenv()
@@ -58,16 +59,34 @@ def getShowtimes(date):
 
     return data
 
+REFRESH_INTERVAL = int(getenv("REFRESH_INTERVAL", "3600"))
+
+showtimes = []
+
 def refreshShowtimes():
     global showtimes
     new_showtimes = []
     for i in range(0, 7):
-        day_showtimes = getShowtimes(datetime.now(timezone) + timedelta(days=i))
+        try:
+            day_showtimes = getShowtimes(datetime.now(timezone) + timedelta(days=i))
+            print(f"{len(day_showtimes)} séances récupéré {i + 1}/7!")
+        except Exception as e:
+            day_showtimes = showtimes[i] if i < len(showtimes) else []
+            print(f"Erreur récupération jour {i + 1}/7, anciennes données conservées: {e}")
         new_showtimes.append(day_showtimes)
-        print(f"{len(day_showtimes)} séances récupéré {i + 1}/7!")
     showtimes = new_showtimes
 
+def _refreshLoop():
+    """Rafraîchit le cache en arrière-plan à intervalle régulier."""
+    while True:
+        time.sleep(REFRESH_INTERVAL)
+        try:
+            refreshShowtimes()
+        except Exception as e:
+            print(f"Erreur inattendue lors du refresh: {e}")
+
 refreshShowtimes()
+Thread(target=_refreshLoop, daemon=True).start()
 
 
 def translate_month(num: int) -> str:
